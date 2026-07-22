@@ -1,0 +1,11 @@
+{
+  "updatedAt": null,
+  "services": {
+    "mezobereny-ssl": { "current": null, "days": {}, "incidents": [] },
+    "mezobereny-http": { "current": null, "days": {}, "incidents": [] },
+    "ovoda": { "current": null, "days": {}, "incidents": [] },
+    "orlaihaz": { "current": null, "days": {}, "incidents": [] },
+    "hunan": { "current": null, "days": {}, "incidents": [] },
+    "mai": { "current": null, "days": {}, "incidents": [] }
+  }
+}

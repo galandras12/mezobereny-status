@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mezobereny-ssl",
+    "name": "Mezőberény weboldala (SSL)",
+    "url": "https://mezobereny.hu"
+  },
+  {
+    "id": "mezobereny-http",
+    "name": "Mezőberény weboldala",
+    "url": "http://mezobereny.hu/s/elerhetosegek"
+  },
+  {
+    "id": "ovoda",
+    "name": "Mezőberény Óvodai Intézménye",
+    "url": "https://berenyiovodak.mezobereny.hu"
+  },
+  {
+    "id": "orlaihaz",
+    "name": "Orlai Ház",
+    "url": "https://orlaihaz.mezobereny.hu"
+  },
+  {
+    "id": "hunan",
+    "name": "Humánsegítő és Szociális Szolgálat",
+    "url": "https://hunan.mezobereny.hu"
+  },
+  {
+    "id": "mai",
+    "name": "Mezőberényi Általános Iskola",
+    "url": "https://mai.mezobereny.hu"
+  }
+]
