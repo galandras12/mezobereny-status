@@ -1,1 +1,37 @@
-<h1><span style="color: #000000;"><strong>HAMAROSAN...</strong></span></h1>
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mezőberény weboldalak – Statuspage</title>
+  <meta name="description" content="Mezőberényi önkormányzati weboldalak élő elérhetőségi státusza és 365 napos statisztikája." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-header">
+      <h1>Mezőberény weboldalak – Statuspage</h1>
+      <span id="updated-at" class="updated-at">Betöltés…</span>
+    </header>
+
+    <div id="summary-banner" class="summary-banner status-unknown">
+      <span class="dot"></span>Betöltés…
+    </div>
+
+    <main id="services-list" class="services"></main>
+
+    <section class="incidents">
+      <h2>Legutóbbi kimaradások</h2>
+      <div id="incidents-list"></div>
+    </section>
+
+    <footer class="page-footer">
+      Automatikusan frissül percenként a GitHub Actions segítségével.
+      <br />
+      <a href="https://github.com/galandras12/mezobereny-status" target="_blank" rel="noopener">Forráskód a GitHubon</a>
+    </footer>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+name: Check status
+
+on:
+  schedule:
+    # GitHub best-effort runs this every minute; under high platform load
+    # GitHub may delay scheduled runs (its documented minimum granularity
+    # is 5 minutes), so actual cadence can occasionally slip.
+    - cron: "* * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: check-status
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run status checks
+        run: node scripts/check-status.mjs
+
+      - name: Commit and push updated status data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update status data"
+          file_pattern: "data/status.json"
+          commit_user_name: "status-bot"
+          commit_user_email: "actions@github.com"
