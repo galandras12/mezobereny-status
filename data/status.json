@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-25T13:11:18.774Z",
+  "updatedAt": "2026-07-25T13:15:18.800Z",
   "services": {
     "mezobereny-ssl": {
       "current": {
@@ -7,16 +7,16 @@
         "statusCode": 200,
         "responseTimeMs": 435,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T11:56:23.279Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 157,
-          "up": 151,
+          "checks": 161,
+          "up": 155,
           "down": 6,
-          "avgResponseMs": 1516,
-          "uptimePct": 96.18
+          "avgResponseMs": 1489,
+          "uptimePct": 96.27
         }
       },
       "incidents": [
@@ -69,17 +69,17 @@
       "current": {
         "status": "up",
         "statusCode": 200,
-        "responseTimeMs": 370,
+        "responseTimeMs": 379,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T10:23:48.228Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 157,
-          "up": 157,
+          "checks": 161,
+          "up": 161,
           "down": 0,
-          "avgResponseMs": 512,
+          "avgResponseMs": 508,
           "uptimePct": 100
         }
       },
@@ -90,17 +90,17 @@
       "current": {
         "status": "up",
         "statusCode": 200,
-        "responseTimeMs": 2602,
+        "responseTimeMs": 2451,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T10:23:48.228Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 157,
-          "up": 157,
+          "checks": 161,
+          "up": 161,
           "down": 0,
-          "avgResponseMs": 1696,
+          "avgResponseMs": 1694,
           "uptimePct": 100
         }
       },
@@ -111,17 +111,17 @@
       "current": {
         "status": "up",
         "statusCode": 200,
-        "responseTimeMs": 568,
+        "responseTimeMs": 575,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T10:23:48.228Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 157,
-          "up": 157,
+          "checks": 161,
+          "up": 161,
           "down": 0,
-          "avgResponseMs": 676,
+          "avgResponseMs": 673,
           "uptimePct": 100
         }
       },
@@ -152,18 +152,18 @@
       "current": {
         "status": "up",
         "statusCode": 200,
-        "responseTimeMs": 3345,
+        "responseTimeMs": 1100,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T13:02:18.717Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 157,
-          "up": 154,
+          "checks": 161,
+          "up": 158,
           "down": 3,
-          "avgResponseMs": 1857,
-          "uptimePct": 98.09
+          "avgResponseMs": 1831,
+          "uptimePct": 98.14
         }
       },
       "incidents": [
@@ -188,17 +188,17 @@
       "current": {
         "status": "up",
         "statusCode": 200,
-        "responseTimeMs": 307,
+        "responseTimeMs": 1774,
         "error": null,
-        "lastCheck": "2026-07-25T13:11:18.774Z",
+        "lastCheck": "2026-07-25T13:15:18.800Z",
         "since": "2026-07-25T10:26:37.587Z"
       },
       "days": {
         "2026-07-25": {
-          "checks": 155,
-          "up": 155,
+          "checks": 159,
+          "up": 159,
           "down": 0,
-          "avgResponseMs": 1277,
+          "avgResponseMs": 1280,
           "uptimePct": 100
         }
       },
