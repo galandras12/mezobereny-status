@@ -7,6 +7,9 @@ const STATUS_PATH = fileURLToPath(new URL("../data/status.json", import.meta.url
 const TIMEOUT_MS = 15000;
 const MAX_HISTORY_DAYS = 365;
 const MAX_INCIDENTS_PER_SERVICE = 200;
+// A service is only reported as an outage once this many consecutive checks
+// fail to get a response, to avoid flagging single transient blips.
+const FAILURES_BEFORE_OUTAGE = 5;
 
 function dayKey(date) {
   // YYYY-MM-DD in the Europe/Budapest timezone.
@@ -71,10 +74,13 @@ async function main() {
 
   for (const svc of services) {
     const result = await checkUrl(svc.url);
-    const newStatus = result.up ? "up" : "down";
 
-    const entry = status.services[svc.id] ?? { current: null, days: {}, incidents: [] };
+    const entry = status.services[svc.id] ?? { current: null, days: {}, incidents: [], consecutiveFailures: 0 };
+    if (entry.consecutiveFailures == null) entry.consecutiveFailures = 0;
     const prevStatus = entry.current?.status ?? null;
+
+    entry.consecutiveFailures = result.up ? 0 : entry.consecutiveFailures + 1;
+    const newStatus = entry.consecutiveFailures >= FAILURES_BEFORE_OUTAGE ? "down" : "up";
 
     if (prevStatus && prevStatus !== newStatus) {
       if (newStatus === "down") {
@@ -118,10 +124,11 @@ async function main() {
     pruneOldDays(entry.days);
     status.services[svc.id] = entry;
 
+    const failureNote = !result.up ? ` [sikertelen mérés ${entry.consecutiveFailures}/${FAILURES_BEFORE_OUTAGE}]` : "";
     console.log(
       `[${svc.id}] ${newStatus.toUpperCase()} status=${result.statusCode ?? "ERR"} ${result.responseTimeMs}ms ${
         result.error ? `(${result.error})` : ""
-      }`,
+      }${failureNote}`,
     );
   }
 
