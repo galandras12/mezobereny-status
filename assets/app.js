@@ -27,15 +27,31 @@ function todayKeyBudapest(date = new Date()) {
   return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Budapest" }).format(date);
 }
 
-function last365Keys() {
+function lastNDaysKeys(n) {
   const keys = [];
   const base = new Date();
-  for (let i = 364; i >= 0; i--) {
+  for (let i = n - 1; i >= 0; i--) {
     const d = new Date(base);
     d.setDate(d.getDate() - i);
     keys.push(todayKeyBudapest(d));
   }
   return keys;
+}
+
+// How many day-bars fit the service card width without needing horizontal
+// scroll — narrower (mobile) screens show fewer, most-recent days.
+function computeVisibleDayCount() {
+  const WRAP_MAX_WIDTH = 860;
+  const WRAP_PADDING_X = 40; // .wrap left+right padding
+  const CARD_PADDING_X = 36; // .service-card left+right padding
+  const PX_PER_DAY = 2.2; // target bar+gap width in px
+  const MIN_DAYS = 30;
+  const MAX_DAYS = 365;
+
+  const viewportWidth = Math.min(window.innerWidth, WRAP_MAX_WIDTH);
+  const available = viewportWidth - WRAP_PADDING_X - CARD_PADDING_X;
+  const count = Math.floor(available / PX_PER_DAY);
+  return Math.max(MIN_DAYS, Math.min(MAX_DAYS, count));
 }
 
 function uptimeOverWindow(days, windowDays) {
@@ -78,8 +94,8 @@ const BANNER_LABEL = {
   unknown: "Állapot ismeretlen — még nem történt ellenőrzés",
 };
 
-function renderBars(days) {
-  const keys = last365Keys();
+function renderBars(days, dayCount) {
+  const keys = lastNDaysKeys(dayCount);
   const frag = document.createDocumentFragment();
   for (const key of keys) {
     const day = days[key];
@@ -136,7 +152,7 @@ function statusBadgeHtml(statusKey, statusTypes) {
   return `<span class="pill pill-color" style="--pill-color:${def.color}"><span class="dot"></span>${escapeHtml(def.label)}</span>`;
 }
 
-function renderService(svc, entry, manualIncident, statusTypes) {
+function renderService(svc, entry, manualIncident, statusTypes, dayCount) {
   const card = document.createElement("div");
   card.className = "service-card";
 
@@ -163,7 +179,7 @@ function renderService(svc, entry, manualIncident, statusTypes) {
     }
     <div class="bars"></div>
     <div class="bars-footer">
-      <span>365 nappal ezelőtt</span>
+      <span>${dayCount} nappal ezelőtt</span>
       <span>ma</span>
     </div>
     <div class="meta-row">
@@ -174,7 +190,7 @@ function renderService(svc, entry, manualIncident, statusTypes) {
     </div>
   `;
 
-  card.querySelector(".bars").appendChild(renderBars(days));
+  card.querySelector(".bars").appendChild(renderBars(days, dayCount));
   return card;
 }
 
@@ -286,11 +302,12 @@ async function load() {
     : "Még nem történt ellenőrzés";
 
   const activeByService = buildActiveIncidentByService(incidents, services);
+  const dayCount = computeVisibleDayCount();
 
   const list = document.getElementById("services-list");
   list.innerHTML = "";
   for (const svc of services) {
-    list.appendChild(renderService(svc, statusData.services[svc.id], activeByService[svc.id], statusTypes));
+    list.appendChild(renderService(svc, statusData.services[svc.id], activeByService[svc.id], statusTypes, dayCount));
   }
 
   renderIncidents(services, statusData);
@@ -304,3 +321,10 @@ load().catch((err) => {
 
 // Refresh periodically so the page stays live without a manual reload.
 setInterval(() => load().catch(console.error), 60000);
+
+// Re-render the bar charts (with a different day count) on resize/rotation.
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => load().catch(console.error), 300);
+});
