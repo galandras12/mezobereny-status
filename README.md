@@ -56,6 +56,11 @@ folyamatban lévő ellenőrzés befejeződjön).
 node scripts/run-status-cron.mjs
 ```
 
+**Windows alatt** dupla kattintással is indítható a `scripts/start-status-cron.bat`
+fájl — ez ugyanezt a `run-status-cron.mjs`-t futtatja Node.js-en keresztül
+(előfeltétel: telepített Node.js, letölthető innen: https://nodejs.org/).
+Ha kényelmesebb, hozz létre hozzá parancsikont az asztalon.
+
 A frontend statikus fájlokból áll (`index.html`, `assets/`), bármilyen
 statikus szerverrel tesztelhető, pl.:
 
