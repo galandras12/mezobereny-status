@@ -37,10 +37,23 @@ automatikusan létrehozza hozzá a saját statisztikáját.
 
 ## Fejlesztés
 
-Az ellenőrző script helyben is futtatható:
+Az ellenőrző script helyben is futtatható egyszeri futásra:
 
 ```bash
 node scripts/check-status.mjs
+```
+
+### Folyamatos, helyi (nem GitHub Actions) ellenőrzés
+
+A GitHub Actions workflow mellett/helyett a `scripts/run-status-cron.mjs`
+egy interaktív, saját gépen/szerveren futtatható "cron" runner: indításkor
+konzolon kiválasztod a gyakoriságot (1, 5, 10 vagy 15 perc), utána addig
+futtatja folyamatosan a `check-status.mjs`-t ezzel az időközzel, amíg le
+nem állítod (`q` + Enter, vagy Ctrl+C — ilyenkor megvárja, hogy a
+folyamatban lévő ellenőrzés befejeződjön).
+
+```bash
+node scripts/run-status-cron.mjs
 ```
 
 A frontend statikus fájlokból áll (`index.html`, `assets/`), bármilyen
