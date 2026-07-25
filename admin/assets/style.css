@@ -56,6 +56,13 @@ body {
   display: none;
 }
 
+.setup-warning {
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 4px 0;
+}
+
 .login-card {
   background: var(--surface);
   border: 1px solid var(--border);

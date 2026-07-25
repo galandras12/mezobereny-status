@@ -226,17 +226,15 @@ header.page-header h1 {
 
 .bars {
   display: flex;
-  gap: 2px;
+  gap: 1px;
   align-items: flex-end;
-  overflow-x: auto;
-  padding-bottom: 2px;
+  overflow: hidden;
 }
 
 .bar {
-  flex: 1 0 3px;
-  min-width: 3px;
+  flex: 1 1 0;
+  min-width: 0;
   height: 34px;
-  border-radius: 2px;
   background: var(--unknown);
   cursor: default;
 }

@@ -12,10 +12,22 @@
     <form id="login-form" class="login-card">
       <h1>Admin belépés</h1>
       <p class="muted">Mezőberény weboldalak – Statuspage adminisztráció</p>
-      <label for="login-password">Jelszó</label>
-      <input id="login-password" name="password" type="password" autocomplete="current-password" required />
-      <p id="login-error" class="error-text" hidden>Hibás jelszó.</p>
-      <button type="submit">Belépés</button>
+
+      <div id="login-fields" hidden>
+        <label for="login-password">Jelszó</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" />
+        <p id="login-error" class="error-text" hidden>Hibás jelszó.</p>
+        <button type="submit">Belépés</button>
+      </div>
+
+      <div id="login-not-configured" hidden>
+        <p class="setup-warning">Állítson be jelszót!</p>
+        <p class="muted">
+          Szerkeszd az <code>admin/auth-config.js</code> fájlt: vedd ki a
+          jelszó sor elejéről a „//” jelet, írd át a saját jelszavadra, majd
+          commitold és pushold.
+        </p>
+      </div>
     </form>
   </div>
 
