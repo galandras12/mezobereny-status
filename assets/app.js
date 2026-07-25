@@ -96,7 +96,47 @@ function renderBars(days) {
   return frag;
 }
 
-function renderService(svc, entry) {
+const SEVERITY_RANK = { major_outage: 4, partial_outage: 3, offline: 2, maintenance: 1, online: 0 };
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+}
+
+function latestUpdate(incident) {
+  return incident.updates[incident.updates.length - 1];
+}
+
+function isActiveIncident(incident) {
+  return latestUpdate(incident)?.status !== "online";
+}
+
+function affectsService(incident, serviceId) {
+  return !incident.serviceIds || incident.serviceIds.length === 0 || incident.serviceIds.includes(serviceId);
+}
+
+// Map of serviceId -> most severe active manual incident affecting it, if any.
+function buildActiveIncidentByService(incidents, services) {
+  const map = {};
+  for (const svc of services) {
+    let worst = null;
+    for (const inc of incidents) {
+      if (!isActiveIncident(inc) || !affectsService(inc, svc.id)) continue;
+      const status = latestUpdate(inc).status;
+      if (!worst || (SEVERITY_RANK[status] ?? 0) > (SEVERITY_RANK[latestUpdate(worst).status] ?? 0)) {
+        worst = inc;
+      }
+    }
+    if (worst) map[svc.id] = worst;
+  }
+  return map;
+}
+
+function statusBadgeHtml(statusKey, statusTypes) {
+  const def = statusTypes[statusKey] ?? { label: statusKey, color: "#888888" };
+  return `<span class="pill pill-color" style="--pill-color:${def.color}"><span class="dot"></span>${escapeHtml(def.label)}</span>`;
+}
+
+function renderService(svc, entry, manualIncident, statusTypes) {
   const card = document.createElement("div");
   card.className = "service-card";
 
@@ -107,13 +147,20 @@ function renderService(svc, entry) {
   const uptime90 = uptimeOverWindow(days, 90);
   const uptime365 = uptimeOverWindow(days, 365);
 
+  const pillHtml = manualIncident
+    ? statusBadgeHtml(latestUpdate(manualIncident).status, statusTypes)
+    : `<span class="pill status-${status}"><span class="dot"></span>${STATUS_LABEL[status] ?? "Ismeretlen"}</span>`;
+
   card.innerHTML = `
     <div class="service-top">
       <div class="service-name"><a href="${svc.url}" target="_blank" rel="noopener">${svc.name}</a></div>
-      <span class="pill status-${status}">
-        <span class="dot"></span>${STATUS_LABEL[status] ?? "Ismeretlen"}
-      </span>
+      ${pillHtml}
     </div>
+    ${
+      manualIncident
+        ? `<div class="manual-incident-note">${escapeHtml(latestUpdate(manualIncident).message)}</div>`
+        : ""
+    }
     <div class="bars"></div>
     <div class="bars-footer">
       <span>365 nappal ezelőtt</span>
@@ -129,6 +176,63 @@ function renderService(svc, entry) {
 
   card.querySelector(".bars").appendChild(renderBars(days));
   return card;
+}
+
+function renderAnnouncementCard(inc, services, statusTypes) {
+  const div = document.createElement("div");
+  div.className = "incident-item announcement-item";
+  const affected =
+    inc.serviceIds && inc.serviceIds.length > 0
+      ? inc.serviceIds.map((id) => services.find((s) => s.id === id)?.name ?? id).join(", ")
+      : "Teljes oldal";
+
+  const timelineHtml = [...inc.updates]
+    .reverse()
+    .map(
+      (u) =>
+        `<div class="announcement-update">
+          <div class="when">${formatDateTime(u.at)} — ${statusBadgeHtml(u.status, statusTypes)}</div>
+          <div class="msg">${escapeHtml(u.message)}</div>
+        </div>`,
+    )
+    .join("");
+
+  div.innerHTML = `
+    <div class="svc">${escapeHtml(inc.title)}</div>
+    <div class="when">Érintett: ${escapeHtml(affected)} · Kezdés: ${formatDateTime(inc.scheduledStart)}</div>
+    <div class="announcement-timeline">${timelineHtml}</div>
+  `;
+  return div;
+}
+
+function renderAnnouncements(incidents, services, statusTypes) {
+  const activeContainer = document.getElementById("active-announcements");
+  const active = incidents.filter(isActiveIncident).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+  activeContainer.innerHTML = "";
+  if (active.length === 0) {
+    activeContainer.hidden = true;
+  } else {
+    activeContainer.hidden = false;
+    for (const inc of active) {
+      const card = document.createElement("div");
+      card.className = "announcement-banner";
+      card.style.setProperty("--pill-color", statusTypes[latestUpdate(inc).status]?.color ?? "#888888");
+      card.appendChild(renderAnnouncementCard(inc, services, statusTypes));
+      activeContainer.appendChild(card);
+    }
+  }
+
+  const allContainer = document.getElementById("announcements-list");
+  allContainer.innerHTML = "";
+  if (incidents.length === 0) {
+    allContainer.innerHTML = '<p class="empty-note">Nincs rögzített bejelentés vagy tervezett karbantartás.</p>';
+    return;
+  }
+  const sorted = [...incidents].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  for (const inc of sorted) {
+    allContainer.appendChild(renderAnnouncementCard(inc, services, statusTypes));
+  }
 }
 
 function renderIncidents(services, statusData) {
@@ -164,10 +268,13 @@ function renderIncidents(services, statusData) {
 
 async function load() {
   const cacheBuster = `?t=${Date.now()}`;
-  const [services, statusData] = await Promise.all([
+  const [services, statusData, incidentsData, statusTypes] = await Promise.all([
     fetch(`data/services.json${cacheBuster}`).then((r) => r.json()),
     fetch(`data/status.json${cacheBuster}`).then((r) => r.json()),
+    fetch(`data/incidents.json${cacheBuster}`).then((r) => r.json()),
+    fetch(`data/status-types.json${cacheBuster}`).then((r) => r.json()),
   ]);
+  const incidents = incidentsData.incidents ?? [];
 
   const banner = document.getElementById("summary-banner");
   const overall = overallStatus(services, statusData);
@@ -178,13 +285,16 @@ async function load() {
     ? `Frissítve: ${formatDateTime(statusData.updatedAt)} (${relativeTime(statusData.updatedAt)})`
     : "Még nem történt ellenőrzés";
 
+  const activeByService = buildActiveIncidentByService(incidents, services);
+
   const list = document.getElementById("services-list");
   list.innerHTML = "";
   for (const svc of services) {
-    list.appendChild(renderService(svc, statusData.services[svc.id]));
+    list.appendChild(renderService(svc, statusData.services[svc.id], activeByService[svc.id], statusTypes));
   }
 
   renderIncidents(services, statusData);
+  renderAnnouncements(incidents, services, statusTypes);
 }
 
 load().catch((err) => {

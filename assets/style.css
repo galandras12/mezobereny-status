@@ -164,6 +164,61 @@ header.page-header h1 {
   color: var(--text-muted);
 }
 
+.pill.pill-color {
+  background: color-mix(in srgb, var(--pill-color) 20%, transparent);
+  color: var(--pill-color);
+}
+
+.manual-incident-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: -4px 0 10px;
+}
+
+.active-announcements {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.active-announcements[hidden] {
+  display: none;
+}
+
+.announcement-banner {
+  border: 1px solid var(--pill-color);
+  border-left-width: 5px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--pill-color) 8%, var(--surface));
+  box-shadow: var(--shadow);
+}
+
+.announcement-banner .incident-item {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.announcement-timeline {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.announcement-update {
+  border-left: 2px solid var(--border);
+  padding: 2px 0 2px 10px;
+}
+
+.announcement-update .msg {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 2px;
+}
+
 .uptime-figure {
   font-size: 0.85rem;
   color: var(--text-muted);
