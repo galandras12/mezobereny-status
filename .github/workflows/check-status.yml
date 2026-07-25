@@ -1,11 +1,12 @@
 name: Check status
 
 on:
-  schedule:
-    # GitHub best-effort runs this every minute; under high platform load
-    # GitHub may delay scheduled runs (its documented minimum granularity
-    # is 5 minutes), so actual cadence can occasionally slip.
-    - cron: "* * * * *"
+  # Automatic per-minute scheduling is disabled — monitoring currently runs
+  # locally via scripts/run-status-cron.mjs (or scripts/start-status-cron.bat
+  # on Windows). To re-enable automatic runs on GitHub, uncomment the
+  # schedule block below.
+  # schedule:
+  #   - cron: "* * * * *"
   workflow_dispatch: {}
 
 permissions:
