@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Statuspage – Admin</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="login-card">
+      <h1>Admin belépés</h1>
+      <p class="muted">Mezőberény weboldalak – Statuspage adminisztráció</p>
+      <label for="login-password">Jelszó</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+      <p id="login-error" class="error-text" hidden>Hibás jelszó.</p>
+      <button type="submit">Belépés</button>
+    </form>
+  </div>
+
+  <div id="dashboard" class="wrap" hidden>
+    <header class="page-header">
+      <h1>Admin – Bejelentések &amp; karbantartás</h1>
+      <div class="header-actions">
+        <a href="../index.html" class="btn btn-ghost" target="_blank" rel="noopener">Publikus oldal</a>
+        <button id="logout-btn" class="btn btn-ghost">Kilépés</button>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="incidents">Bejelentések</button>
+      <button class="tab-btn" data-tab="settings">Beállítások</button>
+    </nav>
+
+    <section id="tab-incidents" class="tab-panel active">
+      <div id="publish-warning" class="warning-banner" hidden>
+        Nincs beállítva (érvényes) GitHub token, ezért a módosítások csak
+        ebben a böngészőben, ideiglenesen érvényesülnek — nem kerülnek fel a
+        publikus oldalra. Állítsd be a Beállítások fülön, vagy használd a
+        „JSON letöltése” gombot és commitold kézzel.
+      </div>
+
+      <div class="card">
+        <h2>Új bejelentés / tervezett karbantartás</h2>
+        <form id="incident-form" class="incident-form">
+          <label for="inc-title">Cím</label>
+          <input id="inc-title" name="title" type="text" required placeholder="Pl. Tervezett szerverkarbantartás" />
+
+          <label>Érintett szolgáltatások</label>
+          <div id="inc-services" class="checkbox-grid"></div>
+
+          <label for="inc-start">Kezdés időpontja</label>
+          <input id="inc-start" name="start" type="datetime-local" required />
+
+          <label for="inc-status">Kezdeti státusz</label>
+          <select id="inc-status" name="status"></select>
+
+          <label for="inc-message">Üzenet a felhasználóknak</label>
+          <textarea id="inc-message" name="message" rows="3" required placeholder="Mi történik, mikorra várható a megoldás…"></textarea>
+
+          <button type="submit" class="btn btn-primary">Bejelentés létrehozása</button>
+        </form>
+      </div>
+
+      <div class="list-header">
+        <h2>Bejelentések</h2>
+        <button id="download-json-btn" class="btn btn-ghost">JSON letöltése</button>
+      </div>
+      <div id="incidents-list" class="incidents-admin-list"></div>
+    </section>
+
+    <section id="tab-settings" class="tab-panel">
+      <div class="card">
+        <h2>GitHub kapcsolat (publikáláshoz)</h2>
+        <p class="muted">
+          A publikáláshoz (hogy a bejelentések valóban felkerüljenek a
+          publikus oldalra) egy GitHub Personal Access Token szükséges,
+          amivel a böngésződ közvetlenül tud írni a repóba. A token csak
+          ennek a böngészőnek a tárolójában (localStorage) marad — sehova
+          máshova nem kerül, nem lesz a repó része. Ajánlott: fine-grained
+          token, csak erre a repóra, csak „Contents: Read and write”
+          jogosultsággal.
+        </p>
+        <form id="settings-form" class="incident-form">
+          <label for="gh-owner">Repó tulajdonos</label>
+          <input id="gh-owner" name="owner" type="text" placeholder="galandras12" />
+
+          <label for="gh-repo">Repó neve</label>
+          <input id="gh-repo" name="repo" type="text" placeholder="mezobereny-status" />
+
+          <label for="gh-branch">Branch (ahova publikáljon)</label>
+          <input id="gh-branch" name="branch" type="text" placeholder="main" />
+
+          <label for="gh-token">GitHub Personal Access Token</label>
+          <input id="gh-token" name="token" type="password" autocomplete="off" placeholder="github_pat_…" />
+
+          <div class="settings-actions">
+            <button type="submit" class="btn btn-primary">Mentés</button>
+            <button type="button" id="gh-test-btn" class="btn btn-ghost">Kapcsolat tesztelése</button>
+            <button type="button" id="gh-clear-btn" class="btn btn-ghost">Token törlése</button>
+          </div>
+        </form>
+        <p id="gh-test-result" class="muted"></p>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>

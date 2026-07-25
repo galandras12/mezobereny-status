@@ -1,0 +1,7 @@
+{
+  "online": { "label": "Online", "color": "#1a9e5c" },
+  "offline": { "label": "Offline", "color": "#d63c3c" },
+  "maintenance": { "label": "Tervezett karbantartás", "color": "#2563eb" },
+  "major_outage": { "label": "Teljes leállás", "color": "#f97316" },
+  "partial_outage": { "label": "Részleges leállás", "color": "#eab308" }
+}

@@ -30,6 +30,53 @@ követő mérés** sem kapott választ — egy-egy elszigetelt sikertelen
 ellenőrzés (átmeneti hálózati hiba, timeout) önmagában nem jelenik meg
 kimaradásként.
 
+## Admin felület – bejelentések és tervezett karbantartás
+
+A `/admin/` alatt elérhető egy jelszóval védett admin felület, ahol kézzel
+rögzíthetsz ismert incidenseket vagy tervezett karbantartást, saját
+üzenettel, beállítható kezdési időponttal. Minden bejelentéshez
+utólag is fel lehet venni új státusz-üzenetet (idővonalszerűen), és minden
+egyes üzenetnél újra megadható a bejelentés aktuális státusza. Az öt
+státusz:
+
+| Státusz | Szín | Jelentés |
+|---|---|---|
+| Online | zöld | rendben működik |
+| Offline | piros | nem elérhető |
+| Tervezett karbantartás | kék | előre bejelentett, tervezett leállás |
+| Teljes leállás | narancssárga | ismert, teljes körű hiba |
+| Részleges leállás | citromsárga | ismert, részleges hiba |
+
+Az aktív (még nem "Online"-ra lezárt) bejelentések kiemelten, színes
+sávként jelennek meg a publikus oldal tetején, és az érintett
+szolgáltatás kártyáján is felülírják az automatikus Elérhető/Nem elérhető
+jelzést.
+
+### Jelszó és biztonsági megjegyzés
+
+A belépő jelszót az `admin/auth-config.js` fájl tartalmazza, egyszerű
+szövegként (nincs hashelve/titkosítva, ahogy kérted). **Fontos tudni:**
+mivel ez a GitHub Pages statikus oldal része, ez a fájl — és vele a
+jelszó — mindenki számára látható, aki megnézi a nyilvános repót vagy az
+oldal forráskódját. Ez tehát nem valódi hozzáférés-védelem, csak
+megakadályozza, hogy a felület véletlenül, egy kattintással megnyíljon —
+nincs is rá link a publikus oldalról, és a `robots.txt` is tiltja a
+keresőmotoroknak. Jelszó módosítása: szerkeszd az `ADMIN_PASSWORD` értékét
+az `admin/auth-config.js`-ben, majd commitold+pushold.
+
+A tényleges publikáláshoz (hogy a bejelentés valóban felkerüljön a
+publikus oldalra) egy **GitHub Personal Access Token** szükséges, amit az
+admin felület Beállítások fülén adsz meg — ez a token **csak a te
+böngésződ localStorage-ában marad**, soha nem kerül a repóba vagy a
+publikus oldalba, tehát ez a rész valóban rejtve marad mindenki más elől.
+Ajánlott egy fine-grained token, csak erre a repóra korlátozva, csak
+„Contents: Read and write” jogosultsággal
+(GitHub → Settings → Developer settings → Personal access tokens).
+
+Token nélkül a felület is használható: a módosítások csak ideiglenesen, a
+böngészőben érvényesülnek, és a „JSON letöltése” gombbal exportálhatod a
+`data/incidents.json` tartalmát kézi commithoz.
+
 ## Beüzemelés
 
 1. **Merge-eld a `main`-be** ezt az ágat.

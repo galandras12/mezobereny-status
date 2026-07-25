@@ -18,15 +18,22 @@
       <span class="dot"></span>Betöltés…
     </div>
 
+    <div id="active-announcements" class="active-announcements" hidden></div>
+
     <main id="services-list" class="services"></main>
 
     <section class="incidents">
-      <h2>Legutóbbi kimaradások</h2>
+      <h2>Bejelentések és tervezett karbantartás</h2>
+      <div id="announcements-list"></div>
+    </section>
+
+    <section class="incidents">
+      <h2>Legutóbbi kimaradások (automatikus ellenőrzés)</h2>
       <div id="incidents-list"></div>
     </section>
 
     <footer class="page-footer">
-      Automatikusan frissül percenként a GitHub Actions segítségével.
+      Az elérhetőség-ellenőrzés helyben, illetve kézi/GitHub Actions futtatással frissül.
       <br />
       <a href="https://github.com/galandras12/mezobereny-status" target="_blank" rel="noopener">Forráskód a GitHubon</a>
     </footer>
