@@ -1,11 +1,125 @@
 {
-  "updatedAt": null,
+  "updatedAt": "2026-07-25T10:24:02.560Z",
   "services": {
-    "mezobereny-ssl": { "current": null, "days": {}, "incidents": [] },
-    "mezobereny-http": { "current": null, "days": {}, "incidents": [] },
-    "ovoda": { "current": null, "days": {}, "incidents": [] },
-    "orlaihaz": { "current": null, "days": {}, "incidents": [] },
-    "hunan": { "current": null, "days": {}, "incidents": [] },
-    "mai": { "current": null, "days": {}, "incidents": [] }
+    "mezobereny-ssl": {
+      "current": {
+        "status": "up",
+        "statusCode": 200,
+        "responseTimeMs": 428,
+        "error": null,
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 2,
+          "down": 0,
+          "avgResponseMs": 690,
+          "uptimePct": 100
+        }
+      },
+      "incidents": []
+    },
+    "mezobereny-http": {
+      "current": {
+        "status": "up",
+        "statusCode": 200,
+        "responseTimeMs": 390,
+        "error": null,
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 2,
+          "down": 0,
+          "avgResponseMs": 377,
+          "uptimePct": 100
+        }
+      },
+      "incidents": []
+    },
+    "ovoda": {
+      "current": {
+        "status": "up",
+        "statusCode": 200,
+        "responseTimeMs": 512,
+        "error": null,
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 2,
+          "down": 0,
+          "avgResponseMs": 1821,
+          "uptimePct": 100
+        }
+      },
+      "incidents": []
+    },
+    "orlaihaz": {
+      "current": {
+        "status": "up",
+        "statusCode": 200,
+        "responseTimeMs": 5904,
+        "error": null,
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 2,
+          "down": 0,
+          "avgResponseMs": 3261,
+          "uptimePct": 100
+        }
+      },
+      "incidents": []
+    },
+    "hunan": {
+      "current": {
+        "status": "down",
+        "statusCode": null,
+        "responseTimeMs": 48,
+        "error": "fetch failed",
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 0,
+          "down": 2,
+          "avgResponseMs": 81,
+          "uptimePct": 0
+        }
+      },
+      "incidents": []
+    },
+    "mai": {
+      "current": {
+        "status": "up",
+        "statusCode": 200,
+        "responseTimeMs": 9428,
+        "error": null,
+        "lastCheck": "2026-07-25T10:24:02.560Z",
+        "since": "2026-07-25T10:23:48.228Z"
+      },
+      "days": {
+        "2026-07-25": {
+          "checks": 2,
+          "up": 2,
+          "down": 0,
+          "avgResponseMs": 6406,
+          "uptimePct": 100
+        }
+      },
+      "incidents": []
+    }
   }
 }
