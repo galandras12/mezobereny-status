@@ -1,5 +1,3 @@
-import { ADMIN_PASSWORD } from "../auth-config.js";
-
 const SESSION_KEY = "mb-admin-authed";
 const SETTINGS_KEY = "mb-admin-gh-settings";
 const TOKEN_KEY = "mb-admin-gh-token";
@@ -11,14 +9,27 @@ const state = {
   services: [],
   statusTypes: {},
   incidents: [],
+  adminPassword: null, // null while unset in admin/auth-config.js (line still commented out)
 };
 
 // ---------- storage helpers ----------
+async function loadAdminPassword() {
+  try {
+    const mod = await import(`../auth-config.js?t=${Date.now()}`);
+    state.adminPassword = mod.ADMIN_PASSWORD || null;
+  } catch (err) {
+    console.error("Nem sikerült betölteni az auth-config.js-t", err);
+    state.adminPassword = null;
+  }
+}
+function isPasswordConfigured() {
+  return Boolean(state.adminPassword);
+}
 function isAuthed() {
-  return sessionStorage.getItem(SESSION_KEY) === "1";
+  return isPasswordConfigured() && sessionStorage.getItem(SESSION_KEY) === "1";
 }
 function login(password) {
-  if (password === ADMIN_PASSWORD) {
+  if (isPasswordConfigured() && password === state.adminPassword) {
     sessionStorage.setItem(SESSION_KEY, "1");
     return true;
   }
@@ -402,9 +413,28 @@ async function showDashboard() {
   renderIncidents();
 }
 
-function init() {
+function renderLoginState() {
+  const fields = document.getElementById("login-fields");
+  const notConfigured = document.getElementById("login-not-configured");
+  const passwordInput = document.getElementById("login-password");
+  if (isPasswordConfigured()) {
+    fields.hidden = false;
+    notConfigured.hidden = true;
+    passwordInput.required = true;
+  } else {
+    fields.hidden = true;
+    notConfigured.hidden = false;
+    passwordInput.required = false;
+  }
+}
+
+async function init() {
+  await loadAdminPassword();
+  renderLoginState();
+
   document.getElementById("login-form").addEventListener("submit", (e) => {
     e.preventDefault();
+    if (!isPasswordConfigured()) return;
     const password = document.getElementById("login-password").value;
     if (login(password)) {
       document.getElementById("login-error").hidden = true;

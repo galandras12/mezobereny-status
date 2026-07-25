@@ -55,14 +55,22 @@ jelzést.
 ### Jelszó és biztonsági megjegyzés
 
 A belépő jelszót az `admin/auth-config.js` fájl tartalmazza, egyszerű
-szövegként (nincs hashelve/titkosítva, ahogy kérted). **Fontos tudni:**
-mivel ez a GitHub Pages statikus oldal része, ez a fájl — és vele a
-jelszó — mindenki számára látható, aki megnézi a nyilvános repót vagy az
-oldal forráskódját. Ez tehát nem valódi hozzáférés-védelem, csak
-megakadályozza, hogy a felület véletlenül, egy kattintással megnyíljon —
-nincs is rá link a publikus oldalról, és a `robots.txt` is tiltja a
-keresőmotoroknak. Jelszó módosítása: szerkeszd az `ADMIN_PASSWORD` értékét
-az `admin/auth-config.js`-ben, majd commitold+pushold.
+szövegként (nincs hashelve/titkosítva, ahogy kérted). Alapból ez a sor
+kommentben van — amíg így marad, az admin felület nem enged bejelentkezni,
+a jelszó mező helyett egy „Állítson be jelszót!” üzenetet mutat.
+Beállításhoz vedd ki a sor eleji „//” jelet, írd át a szöveget a saját
+jelszavadra, majd commitold+pushold:
+
+```js
+export const ADMIN_PASSWORD = "ide-jon-a-sajat-jelszavad";
+```
+
+**Fontos tudni:** mivel ez a GitHub Pages statikus oldal része, ez a fájl —
+és vele a beállított jelszó — mindenki számára látható, aki megnézi a
+nyilvános repót vagy az oldal forráskódját. Ez tehát nem valódi
+hozzáférés-védelem, csak megakadályozza, hogy a felület véletlenül, egy
+kattintással megnyíljon — nincs is rá link a publikus oldalról, és a
+`robots.txt` is tiltja a keresőmotoroknak.
 
 A tényleges publikáláshoz (hogy a bejelentés valóban felkerüljön a
 publikus oldalra) egy **GitHub Personal Access Token** szükséges, amit az
