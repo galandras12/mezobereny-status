@@ -24,6 +24,12 @@ Követett oldalak (`data/services.json`):
 `id`/`name`/`url` hármassal — a `data/status.json` a következő futáskor
 automatikusan létrehozza hozzá a saját statisztikáját.
 
+Egy oldal csak akkor számít kimaradásnak (és csak akkor kerül be az
+incidensek közé, illetve vált "Nem elérhető" státuszra), ha **5 egymást
+követő mérés** sem kapott választ — egy-egy elszigetelt sikertelen
+ellenőrzés (átmeneti hálózati hiba, timeout) önmagában nem jelenik meg
+kimaradásként.
+
 ## Beüzemelés
 
 1. **Merge-eld a `main`-be** ezt az ágat.
