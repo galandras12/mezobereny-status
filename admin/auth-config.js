@@ -8,4 +8,4 @@
 // senki más nem látja — ld. admin/assets/app.js és a README-t.
 //
 // Módosításhoz csak írd át az alábbi szöveget, majd commitold+pushold.
-// export const ADMIN_PASSWORD_ = "valtoztasd-meg-2026";
+export const ADMIN_PASSWORD = "valtoztasd-meg-2026";
