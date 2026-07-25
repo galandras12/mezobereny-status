@@ -2,12 +2,14 @@
 
 Mezőberényi önkormányzati weboldalak élő Statuspage oldala, GitHub Pages-en.
 
-A `.github/workflows/check-status.yml` workflow percenként (best-effort,
-GitHub-oldalon dokumentált minimum ~5 perc, terheléstől függően csúszhat)
-lekéri az alábbi oldalakat, és az eredményt a `data/status.json` fájlba
-menti — ez adja az utolsó 365 nap elérhetőségi statisztikáját (naponta
-összesítve: hány ellenőrzésből hány volt sikeres), plusz a rögzített
-kimaradások (incidensek) listáját.
+Az ellenőrzést a `scripts/check-status.mjs` script végzi: leellenőrzi az
+alábbi oldalakat, és az eredményt a `data/status.json` fájlba menti — ez
+adja az utolsó 365 nap elérhetőségi statisztikáját (naponta összesítve:
+hány ellenőrzésből hány volt sikeres), plusz a rögzített kimaradások
+(incidensek) listáját. A folyamatos futtatás jelenleg **helyben** történik
+(lásd lentebb) — a `.github/workflows/check-status.yml` GitHub Actions
+workflow automatikus (percenkénti) ütemezése ki van kapcsolva, csak
+kézzel indítható az Actions fülön (*Run workflow*).
 
 Követett oldalak (`data/services.json`):
 
@@ -22,18 +24,31 @@ Követett oldalak (`data/services.json`):
 `id`/`name`/`url` hármassal — a `data/status.json` a következő futáskor
 automatikusan létrehozza hozzá a saját statisztikáját.
 
+Egy oldal csak akkor számít kimaradásnak (és csak akkor kerül be az
+incidensek közé, illetve vált "Nem elérhető" státuszra), ha **5 egymást
+követő mérés** sem kapott választ — egy-egy elszigetelt sikertelen
+ellenőrzés (átmeneti hálózati hiba, timeout) önmagában nem jelenik meg
+kimaradásként.
+
 ## Beüzemelés
 
-1. **Merge-eld a `main`-be** ezt az ágat (a schedule trigger csak az
-   alapértelmezett ágon fut).
+1. **Merge-eld a `main`-be** ezt az ágat.
 2. **GitHub Pages bekapcsolása:** Settings → Pages → Source: *Deploy from a
    branch* → Branch: `main` / `/ (root)`.
-3. **Actions jogosultság ellenőrzése:** Settings → Actions → General →
-   Workflow permissions → *Read and write permissions* (kell, hogy a
-   workflow tudjon commitolni a `data/status.json`-ba).
-4. Az első futás után (max. néhány perc, vagy manuálisan az Actions fülön
-   *Run workflow*-val azonnal kiváltható) a `data/status.json` megtelik
-   valós adattal, és az oldal élesben mutatja a státuszokat.
+3. Indítsd el a `scripts/run-status-cron.mjs`-t (vagy Windows alatt a
+   `scripts/start-status-cron.bat`-ot) egy gépen, ami folyamatosan tud
+   futni — ez tölti fel élő adattal a `data/status.json`-t, amit aztán ki
+   is kell commitolni/pusholni a `main`-be, hogy a Pages oldal is lássa.
+
+### GitHub Actions automatikus ütemezés újra bekapcsolása (opcionális)
+
+Ha inkább a felhőben, GitHub Actionsön futna percenként az ellenőrzés
+(helyi gép nélkül), vedd ki a kommentből a `schedule` blokkot a
+`.github/workflows/check-status.yml`-ben, majd:
+
+- **Actions jogosultság ellenőrzése:** Settings → Actions → General →
+  Workflow permissions → *Read and write permissions* (kell, hogy a
+  workflow tudjon commitolni a `data/status.json`-ba).
 
 ## Fejlesztés
 
